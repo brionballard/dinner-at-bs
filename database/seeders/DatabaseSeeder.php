@@ -8,6 +8,8 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+
 use Database\Seeders\RolesAndPermissionSeeder;
 
 class DatabaseSeeder extends Seeder
@@ -19,6 +21,14 @@ class DatabaseSeeder extends Seeder
             'phone' => '6012919988',
             'password' => 'admin'
         ]
+    ];
+
+    /**
+     * Reference RolesAndPermissionSeeder
+     * add update accordingly
+     */
+    protected $adminPermissions = [
+        'import'
     ];
 
     /**
@@ -51,6 +61,12 @@ class DatabaseSeeder extends Seeder
             $user['password'] = Hash::make($user['password']);
             $user = User::create($user);
             $role = Role::where('name', 'admin')->first();
+            $permissions = Permission::whereIn('name', $this->adminPermissions)->get();
+
+            foreach($permissions as $permission) {
+                $user->givePermissionTo($permission);
+            }
+
             $user->assignRole($role);
         }
     }

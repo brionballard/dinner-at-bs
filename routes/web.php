@@ -5,6 +5,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+use App\Http\Controllers\AdminDashboardController;
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -14,26 +16,23 @@ Route::get('/', function () {
     ]);
 });
 
+// Dashboard Routes
 Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
-
-    Route::get('/users', function () {
-        return Inertia::render('Users');
-    })->name('users');
-
-    Route::get('/events', function () {
-        return Inertia::render('Events');
-    })->name('events');
     
-    Route::get('/recipes-and-menus', function () {
-        return Inertia::render('MealsAndRecipes');
-    })->name('recipes-and-menus');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('dashboard.profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('dashboard.profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('dashboard.profile.destroy');
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Admin Specific Routes
+    Route::prefix('admin')->middleware(['role:admin'])->controller(AdminDashboardController::class)->group(function () {
+        Route::get('/', 'admin')->name('dashboard.admin');
+        Route::get('/users', 'users')->name('dashboard.admin.users');
+        Route::get('/events', 'events')->name('dashboard.admin.events');
+        Route::get('/recipes-and-menus', 'recipesAndMenus')->name('dashboard.admin.recipes-and-menus');
+    });
 });
 
 require __DIR__.'/auth.php';

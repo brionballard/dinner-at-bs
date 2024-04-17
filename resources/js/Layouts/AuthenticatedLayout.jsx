@@ -17,26 +17,26 @@ import UserProfilePic from '@/Components/UserProfilePic'
 const navigation = [
     {
         name: 'Users',
-        href: route('users'),
+        href: route('dashboard.admin.users'),
         icon: UsersIcon,
-        current: route().current('users')
+        current: route().current('dashboard.admin.users')
     }, {
         name: 'Events',
-        href: route('events'),
+        href: route('dashboard.admin.events'),
         icon: CalendarIcon,
-        current: route().current('events')
+        current: route().current('dashboard.admin.events')
     }, {
         name: 'Recipes & Menus',
-        href: route('recipes-and-menus'),
+        href: route('dashboard.admin.recipes-and-menus'),
         icon: DocumentDuplicateIcon,
-        current: route().current('recipes-and-menus')
+        current: route().current('dashboard.admin.recipes-and-menus')
     }
 ]
 
 const userNavigation = [
     {
         name: 'Your profile',
-        href: route('profile.edit')
+        href: route('dashboard.profile.edit')
     }
 ]
 
@@ -98,7 +98,7 @@ export default function Authenticated({user, children}) {
                                     <div
                                         className="flex grow flex-col gap-y-5 overflow-y-auto bg-zinc-900 px-6 pb-4 ring-1 ring-white/10">
                                         <div className="flex h-16 shrink-0 items-center">
-                                            <a href={route('dashboard')}>
+                                            <a href={route('dashboard.admin')}>
                                                 <ApplicationLogo className="block h-9 w-auto fill-current text-zinc-800"/>
                                             </a>
                                         </div>
@@ -122,7 +122,7 @@ export default function Authenticated({user, children}) {
 
                                                 <li className="mt-auto">
                                                     <a
-                                                        href={route('profile.edit')}
+                                                        href={route('dashboard.profile.edit')}
                                                         className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-zinc-400 hover:bg-zinc-800 hover:text-white">
                                                         <Cog6ToothIcon className="h-6 w-6 shrink-0" aria-hidden="true"/>
                                                         Settings
@@ -144,7 +144,7 @@ export default function Authenticated({user, children}) {
                     <div
                         className="flex grow flex-col gap-y-5 overflow-y-auto bg-zinc-900 px-6 pb-4">
                         <div className="flex h-16 shrink-0 items-center">
-                            <a href={route('dashboard')}>
+                            <a href={route('dashboard.admin')}>
                                 <ApplicationLogo className="block h-9 w-auto fill-current text-zinc-800"/>
                             </a>
                         </div>
@@ -168,7 +168,7 @@ export default function Authenticated({user, children}) {
 
                                 <li className="mt-auto">
                                     <a
-                                        href={route('profile.edit')}
+                                        href={route('dashboard.profile.edit')}
                                         className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-zinc-400 hover:bg-zinc-800 hover:text-white">
                                         <Cog6ToothIcon className="h-6 w-6 shrink-0" aria-hidden="true"/>
                                         Settings
