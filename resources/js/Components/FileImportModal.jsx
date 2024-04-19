@@ -3,19 +3,19 @@ import OverlayCard from '@/Components/Overlays/OverlayCard';
 import {PlusIcon} from '@heroicons/react/20/solid'
 import {Fragment, useState} from 'react';
 import {FaSpinner} from "react-icons/fa";
-import { API } from '@/endpoints';
+import {API} from '@/endpoints';
 import Alert from './Alerts/Alert';
 
 const modalName = 'FileImportModal';
 
 export default function FileImportModal({open, setOpen, deps}) {
-
-    const [files, 
+    const [files,
         setFiles] = useState([]);
-    const [loading, 
+    const [loading,
         setLoading] = useState(false);
+    const [importStatus,
+        setImportStatus] = useState({status: null, message: null});
 
-    const [importStatus, setImportStatus] = useState({status: null, message: null})
     /**
      * Handle closing modal
      */
@@ -62,7 +62,7 @@ export default function FileImportModal({open, setOpen, deps}) {
      */
     function setLoadingTimeout() {
         setTimeout(() => {
-            setLoading(false)
+            setLoading(false);
         }, 300);
     }
 
@@ -72,9 +72,11 @@ export default function FileImportModal({open, setOpen, deps}) {
     function getFormData() {
         let data = new FormData();
 
-        Array.from(files).forEach(file => {
-            data.append('files[]', file);
-        });
+        Array
+            .from(files)
+            .forEach(file => {
+                data.append('files[]', file);
+            });
 
         return data;
     }
@@ -82,7 +84,7 @@ export default function FileImportModal({open, setOpen, deps}) {
     /**
      * Set alert for users with status and message
      */
-    function updateImportStatus (status, message) {
+    function updateImportStatus(status, message) {
         setImportStatus({
             ...importStatus,
             status,
@@ -95,7 +97,7 @@ export default function FileImportModal({open, setOpen, deps}) {
      */
     function closeModal() {
         setTimeout(() => {
-            setOpen(modalName)
+            setOpen(modalName);
         }, 3500)
     }
 
@@ -118,11 +120,9 @@ export default function FileImportModal({open, setOpen, deps}) {
                     </svg>
                     <h3 className="mt-2 text-sm font-semibold text-gray-900">No File Selected</h3>
                     <p className="mt-1 text-sm text-gray-500 mb-3">Get started by uploading a CSV or XLSX</p>
-                    {
-                        importStatus.status ? 
-                        <Alert status={importStatus.status} headline={importStatus.message} /> : 
-                        null
-                    }
+                    {importStatus.status
+                        ? <Alert status={importStatus.status} headline={importStatus.message}/>
+                        : null}
                     <form onSubmit={handleSubmit} className="mt-3" encType='multipart/form-data'>
                         {files.length === 0
                             ? <Fragment>
@@ -130,8 +130,7 @@ export default function FileImportModal({open, setOpen, deps}) {
                                         type="button"
                                         htmlFor="upload"
                                         className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer">
-                                        <PlusIcon className="-ml-0.5 mr-1.5 h-5 w-5" aria-hidden="true"/> 
-                                        {loading
+                                        <PlusIcon className="-ml-0.5 mr-1.5 h-5 w-5" aria-hidden="true"/> {loading
                                             ? <FaSpinner className='spin'/>
                                             : 'Select File'}
                                     </label>
@@ -141,7 +140,7 @@ export default function FileImportModal({open, setOpen, deps}) {
                                         id="upload"
                                         accept=".csv,.xlsx,.xls"
                                         className='hidden'
-                                        multiple />
+                                        multiple/>
                                 </Fragment>
                             : <button
                                 type="submit"
