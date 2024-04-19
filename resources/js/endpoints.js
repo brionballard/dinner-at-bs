@@ -1,5 +1,5 @@
 export const API = {
     import: {
-        user: "/api/v1/imports/user"
+        "grouped-breeze": "/api/v1/imports/grouped-breeze"
     }
 };

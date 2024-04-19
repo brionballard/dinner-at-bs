@@ -9,7 +9,7 @@ Route::prefix('api')->group(function () {
         ->middleware('can:import')
         ->controller(ImportController::class)
         ->group(function () {
-            Route::post('/{model}', 'importModel');
+            Route::post('/{importType}', 'import');
         });
     });
 });

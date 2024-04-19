@@ -7,7 +7,8 @@ import { API } from '@/endpoints';
 
 const modalName = 'FileImportModal';
 
-export default function FileImportModal({open, setOpen}) {
+export default function FileImportModal({open, setOpen, deps}) {
+    console.log(deps)
     const [files, 
         setFiles] = useState([]);
     const [loading, 
@@ -43,7 +44,7 @@ export default function FileImportModal({open, setOpen}) {
         try {
             let data = getFormData();
 
-            const res = await axios.post(API.import.user, data, {
+            const res = await axios.post(API.import[deps.importType], data, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -61,10 +62,12 @@ export default function FileImportModal({open, setOpen}) {
         }
     }
 
-    function getFormData () {
-       let data = new FormData();
+    function getFormData() {
+        let data = new FormData();
 
-       data.append('files', files);
+        Array.from(files).forEach(file => {
+            data.append('files[]', file);
+        });
 
         return data;
     }
@@ -88,7 +91,7 @@ export default function FileImportModal({open, setOpen}) {
                     </svg>
                     <h3 className="mt-2 text-sm font-semibold text-gray-900">No File Selected</h3>
                     <p className="mt-1 text-sm text-gray-500">Get started by uploading a CSV or XLSX</p>
-                    <form onSubmit={handleSubmit} className="mt-6">
+                    <form onSubmit={handleSubmit} className="mt-6" encType='multipart/form-data'>
                         {files.length === 0
                             ? <Fragment>
                                     <label
@@ -105,7 +108,8 @@ export default function FileImportModal({open, setOpen}) {
                                         onChange={e => handleFileSelection(e)}
                                         id="upload"
                                         accept=".csv,.xlsx,.xls"
-                                        className='hidden'/>
+                                        className='hidden'
+                                        multiple />
                                 </Fragment>
                             : <button
                                 type="submit"

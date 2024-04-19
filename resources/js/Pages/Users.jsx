@@ -16,7 +16,9 @@ export default function Users({auth, users}) {
             name: 'FileImportModal',
             Modal: FileImportModal,
             show: false,
-            deps: {}
+            deps: {
+                importType: ''
+            }
         }
     ]);
 
@@ -24,10 +26,16 @@ export default function Users({auth, users}) {
         console.log(id)
     }
 
-    function setModalVisibility (name) {
+    /**
+     * Handle update modal visibility and dependencies
+     * @param string
+     * @param any - should be relative to the modal logic
+     */
+    function setModalVisibility (name, deps) {
         const updatedModals = modals.map(modal => {
             if (modal.name === name) {
                 modal.show = !modal.show
+                modal.deps = deps
             }
 
             return modal
@@ -54,9 +62,9 @@ export default function Users({auth, users}) {
                                 <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex sm:flex-row gap-2">
                                     <button
                                         type="button"
-                                        onClick={() => setModalVisibility('FileImportModal')}
+                                        onClick={() => setModalVisibility('FileImportModal', {importType: 'grouped-breeze'})}
                                         className="block rounded-md bg-transparent border-green-600 border-2 px-3 py-2 text-center text-sm font-semibold text-green-600 shadow-sm hover:bg-green-500/20 duration-150">
-                                        Import +
+                                        Import From Breeze +
                                     </button>
                                     <button
                                         type="button"
@@ -85,7 +93,7 @@ export default function Users({auth, users}) {
                 if (!show) return;
 
                 return (
-                    <Modal key={name} open={show} setOpen={setModalVisibility} {...deps}/>
+                    <Modal key={name} open={show} setOpen={setModalVisibility} deps={deps}/>
                 )
             })}
         </AuthenticatedLayout>
