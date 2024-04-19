@@ -49,7 +49,7 @@ class ImportController extends Controller
         } catch (\Throwable $th) {
             throw new $th;
             return response()->json([
-                'message' => 'Failed imported ' . $model
+                'message' => 'Failed imported ' . $importType
             ], 400);
         }
     }

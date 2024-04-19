@@ -4,6 +4,7 @@ import {Head} from '@inertiajs/react';
 import {useState} from 'react';
 
 import FileImportModal from '@/Components/FileImportModal';
+import Alert from '@/Components/Alerts/Alert';
 
 /**
  * Users page depends on a LengthAwarePaginator instance of users & an authenticated user
@@ -31,7 +32,7 @@ export default function Users({auth, users}) {
      * @param string
      * @param any - should be relative to the modal logic
      */
-    function setModalVisibility (name, deps) {
+    function toggleModalVisibility (name, deps) {
         const updatedModals = modals.map(modal => {
             if (modal.name === name) {
                 modal.show = !modal.show
@@ -47,6 +48,7 @@ export default function Users({auth, users}) {
     return (
         <AuthenticatedLayout user={auth.user}>
             <Head title="Users"/>
+
             <div className="py-6">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -62,7 +64,7 @@ export default function Users({auth, users}) {
                                 <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex sm:flex-row gap-2">
                                     <button
                                         type="button"
-                                        onClick={() => setModalVisibility('FileImportModal', {importType: 'grouped-breeze'})}
+                                        onClick={() => toggleModalVisibility('FileImportModal', {importType: 'grouped-breeze'})}
                                         className="block rounded-md bg-transparent border-green-600 border-2 px-3 py-2 text-center text-sm font-semibold text-green-600 shadow-sm hover:bg-green-500/20 duration-150">
                                         Import From Breeze +
                                     </button>
@@ -93,7 +95,7 @@ export default function Users({auth, users}) {
                 if (!show) return;
 
                 return (
-                    <Modal key={name} open={show} setOpen={setModalVisibility} deps={deps}/>
+                    <Modal key={name} open={show} setOpen={toggleModalVisibility} deps={deps}/>
                 )
             })}
         </AuthenticatedLayout>

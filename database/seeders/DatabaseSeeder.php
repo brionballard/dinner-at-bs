@@ -38,9 +38,9 @@ class DatabaseSeeder extends Seeder
     {
         $this->seedDataDependencies();
         
-        if (env('APP_ENV') !== 'production') {
-            $this->seedDevData();
-        }
+        // if (env('APP_ENV') !== 'production') {
+        //     $this->seedDevData();
+        // }
     }
 
     /**

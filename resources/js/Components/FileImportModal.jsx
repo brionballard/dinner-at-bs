@@ -4,16 +4,18 @@ import {PlusIcon} from '@heroicons/react/20/solid'
 import {Fragment, useState} from 'react';
 import {FaSpinner} from "react-icons/fa";
 import { API } from '@/endpoints';
+import Alert from './Alerts/Alert';
 
 const modalName = 'FileImportModal';
 
 export default function FileImportModal({open, setOpen, deps}) {
-    console.log(deps)
+
     const [files, 
         setFiles] = useState([]);
     const [loading, 
         setLoading] = useState(false);
 
+    const [importStatus, setImportStatus] = useState({status: null, message: null})
     /**
      * Handle closing modal
      */
@@ -26,12 +28,8 @@ export default function FileImportModal({open, setOpen, deps}) {
      */
     function handleFileSelection(e) {
         setLoading(true);
-
         setFiles(e.target.files);
-
-        setTimeout(() => {
-            setLoading(false)
-        }, 200);
+        setLoadingTimeout();
     }
 
     /**
@@ -50,18 +48,27 @@ export default function FileImportModal({open, setOpen, deps}) {
                 }
             });
 
-            setTimeout(() => {
-                setLoading(false)
-            }, 300);
-            // TODO: Handle success
+            updateImportStatus(res.status, res.data.message);
+            setLoadingTimeout();
+            closeModal();
         } catch (error) {
-            // TODO: Handle error
-             setTimeout(() => {
-                setLoading(false)
-            }, 300);
+            updateImportStatus(error.status, error.response.data.message);
+            setLoadingTimeout();
         }
     }
 
+    /**
+     * Set timeout to change loading state
+     */
+    function setLoadingTimeout() {
+        setTimeout(() => {
+            setLoading(false)
+        }, 300);
+    }
+
+    /**
+     * Format form data
+     */
     function getFormData() {
         let data = new FormData();
 
@@ -70,6 +77,26 @@ export default function FileImportModal({open, setOpen, deps}) {
         });
 
         return data;
+    }
+
+    /**
+     * Set alert for users with status and message
+     */
+    function updateImportStatus (status, message) {
+        setImportStatus({
+            ...importStatus,
+            status,
+            message
+        });
+    }
+
+    /**
+     * Close modal
+     */
+    function closeModal() {
+        setTimeout(() => {
+            setOpen(modalName)
+        }, 3500)
     }
 
     return (
@@ -90,8 +117,13 @@ export default function FileImportModal({open, setOpen, deps}) {
                             d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
                     </svg>
                     <h3 className="mt-2 text-sm font-semibold text-gray-900">No File Selected</h3>
-                    <p className="mt-1 text-sm text-gray-500">Get started by uploading a CSV or XLSX</p>
-                    <form onSubmit={handleSubmit} className="mt-6" encType='multipart/form-data'>
+                    <p className="mt-1 text-sm text-gray-500 mb-3">Get started by uploading a CSV or XLSX</p>
+                    {
+                        importStatus.status ? 
+                        <Alert status={importStatus.status} headline={importStatus.message} /> : 
+                        null
+                    }
+                    <form onSubmit={handleSubmit} className="mt-3" encType='multipart/form-data'>
                         {files.length === 0
                             ? <Fragment>
                                     <label
