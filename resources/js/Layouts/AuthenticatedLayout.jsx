@@ -13,6 +13,7 @@ import {ChevronDownIcon, MagnifyingGlassIcon} from '@heroicons/react/20/solid'
 import ApplicationLogo from '@/Components/ApplicationLogo'
 import LogoutButton from '@/Components/LogoutButton'
 import UserProfilePic from '@/Components/UserProfilePic'
+import { AlertProvider } from '@/Context/AlertContext'
 
 const navigation = [
     {
@@ -265,7 +266,11 @@ export default function Authenticated({user, children}) {
                     </div>
 
                     <main className="py-10">
-                        <div className="px-4 sm:px-6 lg:px-8">{children}</div>
+                        <div className="px-4 sm:px-6 lg:px-8">
+                            <AlertProvider>
+                                {children}
+                            </AlertProvider>
+                        </div>
                     </main>
                 </div>
             </div> 
