@@ -71,7 +71,7 @@ class GroupedBreezeUserImport implements ToCollection
             $role = $row[14]; // does nothing right now
             $relationship_status = $row[9]; // should go to profile
 
-            $children = $row[15];
+            $children = $row[15]; // profile
 
             if ($children) {
                 $children = $this->getChildren($children); // TODO: Handle kids - should go to profile model
@@ -85,6 +85,7 @@ class GroupedBreezeUserImport implements ToCollection
             $age = $row[12]; // profile model
             $birthday = $row[10]; // profile model
 
+            // TODO: Store family hiearchy
             for ($i=0; $i < count($names); $i++) { 
                 if ($i > 0) {
                     User::create([
@@ -130,6 +131,7 @@ class GroupedBreezeUserImport implements ToCollection
         return $formatted_names;
     }
 
+    // TODO: Complete parsing different string formats of children
     private function getChildren(string $children)
     {
         return explode(',', $children);
