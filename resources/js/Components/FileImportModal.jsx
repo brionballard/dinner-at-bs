@@ -5,17 +5,20 @@ import {Fragment, useState} from 'react';
 import {FaSpinner} from "react-icons/fa";
 import { API } from '@/endpoints';
 import Alert from './Alerts/Alert';
+import { useAlert } from '@/Context/AlertContext';
+import Button from './Buttons/Button';
 
 const modalName = 'FileImportModal';
 
 export default function FileImportModal({open, setOpen, deps}) {
+
+    const {alertData, setAlertData} = useAlert();
 
     const [files, 
         setFiles] = useState([]);
     const [loading, 
         setLoading] = useState(false);
 
-    const [importStatus, setImportStatus] = useState({status: null, message: null})
     /**
      * Handle closing modal
      */
@@ -83,10 +86,11 @@ export default function FileImportModal({open, setOpen, deps}) {
      * Set alert for users with status and message
      */
     function updateImportStatus (status, message) {
-        setImportStatus({
-            ...importStatus,
+        setAlertData({
+            ...alertData, 
             status,
-            message
+            headline: message,
+            open: true
         });
     }
 
@@ -95,6 +99,7 @@ export default function FileImportModal({open, setOpen, deps}) {
      */
     function closeModal() {
         setTimeout(() => {
+            setFiles([]);
             setOpen(modalName)
         }, 3500)
     }
@@ -118,11 +123,7 @@ export default function FileImportModal({open, setOpen, deps}) {
                     </svg>
                     <h3 className="mt-2 text-sm font-semibold text-gray-900">No File Selected</h3>
                     <p className="mt-1 text-sm text-gray-500 mb-3">Get started by uploading a CSV or XLSX</p>
-                    {
-                        importStatus.status ? 
-                        <Alert status={importStatus.status} headline={importStatus.message} /> : 
-                        null
-                    }
+                    <Alert /> 
                     <form onSubmit={handleSubmit} className="mt-3" encType='multipart/form-data'>
                         {files.length === 0
                             ? <Fragment>
@@ -143,13 +144,7 @@ export default function FileImportModal({open, setOpen, deps}) {
                                         className='hidden'
                                         multiple />
                                 </Fragment>
-                            : <button
-                                type="submit"
-                                className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer">
-                                {loading
-                                    ? <FaSpinner className='spin'/>
-                                    : 'Import'}
-                            </button>}
+                            : <Button loading={loading} text='Import' type="submit" />}
                     </form>
                 </div>
             </OverlayCard>
