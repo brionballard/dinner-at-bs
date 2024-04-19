@@ -18,8 +18,6 @@ export default function FileImportModal({open, setOpen, deps}) {
         setFiles] = useState([]);
     const [loading,
         setLoading] = useState(false);
-    const [importStatus,
-        setImportStatus] = useState({status: null, message: null});
 
     /**
      * Handle closing modal
